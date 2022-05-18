@@ -1,0 +1,9 @@
+bin/
+obj/
+*.user
+*.suo
+[Dd]ebug/
+[Rr]elease/
+.vs/
+*.bak
+_ReSharper*/
