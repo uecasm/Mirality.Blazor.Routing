@@ -29,16 +29,21 @@ It embeds (almost entirely verbatim) a large chunk of ASP.NET 6 Router code, sin
 Simply add the following to any page where you want to be able to block navigation:
 
 ```c#
-<PageLocker IsLocked="@_IsLocked" />
+<PageLocker IsLocked="@_IsLocked" NavigationBlocked="OnNavigationBlocked" />
 ```
 
 In your code-behind, declare:
 
 ```c#
 private bool _IsLocked;
+
+private async Task OnNavigationBlocked(LocationChangedEventArgs e)
+{
+    //...
+}
 ```
 
-(changing names if you prefer.)  Then simply set this field to `true` whenever you want to block navigation and to false when you want to enable it again.
+(changing names if you prefer.)  Then simply set this field to `true` whenever you want to block navigation and to false when you want to enable it again.  You'll receive a callback if navigation is attempted while locked.
 
 The actual lock/unlock is deferred until the end of the current event (whenever it next synchronises parameters), so this is not suitable if you want to unlock navigation and then immediately `NavigateTo`, for example.
 
