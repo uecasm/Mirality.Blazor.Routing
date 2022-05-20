@@ -1,4 +1,6 @@
-﻿This is a custom Blazor router implementation that allows navigation to be cancelled (for example, to prevent data loss if a form has unsaved changes).
+﻿![.NET 6](https://img.shields.io/static/v1?label=.NET&message=6&color=blue) [![NuGet version (Mirality.Blazor.Routing)](https://img.shields.io/nuget/v/Mirality.Blazor.Routing.svg?logo=nuget)](https://www.nuget.org/packages/Mirality.Blazor.Routing/)
+
+This is a custom Blazor router implementation that allows navigation to be cancelled (for example, to prevent data loss if a form has unsaved changes).
 
 It is inspired by [Blazr.Demo.Routing](https://github.com/ShaunCurtis/Blazr.Demo.Routing) and uses a similar technique to hook the routing and actually cancel navigation; though it does not copy any of the actual code directly, and it uses a completely different front-end that I happen to prefer over that version.
 
