@@ -1,50 +1,55 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 
-namespace Mirality.Blazor.Routing
+namespace Mirality.Blazor.Routing;
+
+/// <summary>Component which conditionally locks navigation on a page.</summary>
+public class PageLocker : ComponentBase, IDisposable
 {
-    public class PageLocker : ComponentBase, IDisposable
+    [Inject] private ILockableNavigationManager Nav { get; set; } = default!;
+
+    /// <summary>When true, navigation is locked.</summary>
+    [Parameter] public bool IsLocked { get; set; }
+
+    /// <summary>Raised when navigation is attempted while locked.</summary>
+    [Parameter] public EventCallback<LocationChangedEventArgs> NavigationBlocked { get; set; }
+
+    private IDisposable? _Lock;
+
+    /// <inheritdoc />
+    protected override void OnInitialized()
     {
-        [Inject] private ILockableNavigationManager Nav { get; set; } = default!;
+        Nav.NavigationBlocked += Nav_NavigationBlocked;
 
-        [Parameter] public bool IsLocked { get; set; }
+        base.OnInitialized();
+    }
 
-        [Parameter] public EventCallback<LocationChangedEventArgs> NavigationBlocked { get; set; }
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        Nav.NavigationBlocked -= Nav_NavigationBlocked;
 
-        private IDisposable? _Lock;
+        _Lock?.Dispose();
+    }
 
-        protected override void OnInitialized()
+    /// <inheritdoc />
+    protected override void OnParametersSet()
+    {
+        if (_Lock == null && IsLocked)
         {
-            Nav.NavigationBlocked += Nav_NavigationBlocked;
-
-            base.OnInitialized();
+            _Lock = Nav.LockNavigation();
+        }
+        else if (_Lock != null && !IsLocked)
+        {
+            _Lock.Dispose();
+            _Lock = null;
         }
 
-        public void Dispose()
-        {
-            Nav.NavigationBlocked -= Nav_NavigationBlocked;
+        base.OnParametersSet();
+    }
 
-            _Lock?.Dispose();
-        }
-
-        protected override void OnParametersSet()
-        {
-            if (_Lock == null && IsLocked)
-            {
-                _Lock = Nav.LockNavigation();
-            }
-            else if (_Lock != null && !IsLocked)
-            {
-                _Lock.Dispose();
-                _Lock = null;
-            }
-
-            base.OnParametersSet();
-        }
-
-        private void Nav_NavigationBlocked(object? sender, LocationChangedEventArgs e)
-        {
-            _ = NavigationBlocked.InvokeAsync(e);
-        }
+    private void Nav_NavigationBlocked(object? sender, LocationChangedEventArgs e)
+    {
+        _ = NavigationBlocked.InvokeAsync(e);
     }
 }

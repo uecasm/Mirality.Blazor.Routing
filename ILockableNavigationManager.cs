@@ -31,6 +31,7 @@ public interface ILockableNavigationManager : ICustomNavigationManager
     event EventHandler BrowserExitBlocked;
 }
 
+/// <summary>Extension class for <see cref="ILockableNavigationManager"/>.</summary>
 public static class LockableNavigationExtensions
 {
     /// <summary>Sets the lock state from a boolean, via the specified lock field.</summary>

@@ -6,7 +6,7 @@ It embeds (almost entirely verbatim) a large chunk of ASP.NET 6 Router code, sin
 
 # Basic Setup
 
-1. Download this project and unpack it to a suitable location in your source tree (or reference it as a git submodule).
+1. Either use the precompiled package from nuget.org; or optionally, download this project and unpack it to a suitable location in your source tree (or reference it as a git submodule).
 
 2. Add it to your solution if needed, and add it as a project reference to your application.
 

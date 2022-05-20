@@ -3,11 +3,16 @@ using Microsoft.JSInterop;
 
 namespace Mirality.Blazor.Routing;
 
+/// <summary>Interface for a browser exit handler</summary>
 public interface IBrowserExitHandler
 {
+    /// <summary>Raised when an attempted browser exit has been blocked</summary>
     event EventHandler? BrowserExitBlocked;
 }
 
+/// <summary>A component that will conditionally block (as much as the browser will allow) closing or exiting
+/// while the navigation state is locked.</summary>
+/// <remarks>Recommended to include in your App or MainLayout if you want this functionality.</remarks>
 public class BrowserExitLock : ComponentBase, IAsyncDisposable, IBrowserExitHandler
 {
     [Inject] private IJSRuntime Js { get; set; } = default!;
@@ -17,11 +22,13 @@ public class BrowserExitLock : ComponentBase, IAsyncDisposable, IBrowserExitHand
     private DotNetObjectReference<BrowserExitLock> _Self = default!;
     private bool _IsLocked;
 
+    /// <summary>Constructor</summary>
     public BrowserExitLock()
     {
         _ModuleTask = new(() => Js.InvokeAsync<IJSObjectReference>("import", "./_content/Mirality.Blazor.Routing/browserexit.js").AsTask());
     }
 
+    /// <inheritdoc/>
     protected override async Task OnInitializedAsync()
     {
         LockableNav.RegisterBrowserExitHandler(this);
@@ -37,6 +44,7 @@ public class BrowserExitLock : ComponentBase, IAsyncDisposable, IBrowserExitHand
         await base.OnInitializedAsync();
     }
 
+    /// <inheritdoc />
     public async ValueTask DisposeAsync()
     {
         LockableNav.UnregisterBrowserExitHandler(this);
@@ -56,6 +64,7 @@ public class BrowserExitLock : ComponentBase, IAsyncDisposable, IBrowserExitHand
         }
     }
 
+    /// <inheritdoc />
     public event EventHandler? BrowserExitBlocked;
 
     private void OnLockedChanged(object? sender, EventArgs e)
@@ -84,6 +93,7 @@ public class BrowserExitLock : ComponentBase, IAsyncDisposable, IBrowserExitHand
         await module.InvokeVoidAsync("unlock");
     }
 
+    /// <summary>Intended for internal use only</summary>
     [JSInvokable]
     public Task NotifyExitAttempt()
     {

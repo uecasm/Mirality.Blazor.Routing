@@ -34,9 +34,11 @@ internal class NullLockableNavigationManager : ILockableNavigationManager
         return new Unlocker();
     }
 
+#pragma warning disable 67
     public event EventHandler? IsLockedChanged;
     public event EventHandler<LocationChangedEventArgs>? NavigationBlocked;
     public event EventHandler? BrowserExitBlocked;
+#pragma warning restore 67
 
     public event EventHandler<LocationChangedEventArgs> LocationChanged
     {
