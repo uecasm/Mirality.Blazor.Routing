@@ -6,6 +6,8 @@ It is inspired by [Blazr.Demo.Routing](https://github.com/ShaunCurtis/Blazr.Demo
 
 It embeds (almost entirely verbatim) a large chunk of ASP.NET 6 Router code, since these were implemented as `internal` and there isn't currently any other way to hook it.
 
+Currently, I only test this with Blazor WebAssembly, although it should theoretically work with Blazor Server as well.  Let me know if there are any issues.
+
 # Basic Setup
 
 1. Either use the precompiled package from nuget.org; or optionally, download this project and unpack it to a suitable location in your source tree (or reference it as a git submodule).
